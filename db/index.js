@@ -491,7 +491,8 @@ function matchesFilter(val, filter, conditionalOperator) {
       case 'BETWEEN':
         if (!attrVal || compType != attrType ||
           (attrType == 'N' && (!Big(attrVal).gte(compVal) || !Big(attrVal).lte(compVals[1].N))) ||
-          (attrType != 'N' && (attrVal < compVal || attrVal > compVals[1][compType]))) return false
+          (attrType == 'S' && (attrVal < compVal || attrVal > compVals[1][compType])) ||
+		  (attrType == 'B' && (new Buffer(attrVal, "base64").toString("hex") < new Buffer(compVal, "base64").toString("hex") || new Buffer(attrVal, "base64").toString("hex") > new Buffer(compVals[1][compType], "base64").toString("hex")))) return false
     }
     return true
   })
